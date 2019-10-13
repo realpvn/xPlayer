@@ -49,11 +49,6 @@ Window {
         }
         ProgressBar{
             id: control
-//            background: Rectangle{
-//                color: "#fff"
-//                radius: width/2
-//                border.color: "#ddd"
-//            }
             background: Rectangle {
                 implicitWidth: width
                 implicitHeight: 6
@@ -74,14 +69,12 @@ Window {
 
                 z:101
             }
-
             width: parent.width
             from: 0
             to: player.duration
             value: player.position
         }
     }
-
 
     Row{
         id: controlsRow
