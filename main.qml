@@ -118,9 +118,46 @@ Window {
             font.pixelSize: 11
             anchors.bottom: openBtn.bottom
             onClicked: {
-                var component = Qt.createComponent("child.qml");
-                win = component.createObject(root);
-                win.show();
+                winld.active = true
+            }
+        }
+        Loader {
+            id: winld
+            active: false
+            sourceComponent: Window {
+                width: 640
+                height: 480
+                visible: true
+
+                ListModel {
+                    id: songModel
+                    ListElement {
+                        name: "Bill Smith"
+                        number: "555 3264"
+                    }
+                }
+
+                ListView {
+                    width: parent.width
+                    implicitHeight: 200
+                    model: songModel
+
+                    delegate: Text {
+                        text: {
+                            for(var i=0; i<songModel.count; i++)
+                                console.log(songModel.get(i).name)
+                        }
+                    }
+
+                    Button{
+                        width: parent.width
+                        height: 50
+                        anchors.bottom: parent.bottom
+                        onClicked: {
+                            songModel.append({"name": "asdasdasd"})
+                        }
+                    }
+                }
             }
         }
         FileDialog{
