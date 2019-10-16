@@ -112,59 +112,46 @@ Window {
         }
 
         Button{
-            text: "New window"
+            text: "Playlist"
             font.family: "Montserrat"
             font.weight: Font.DemiBold
             font.pixelSize: 11
             anchors.bottom: openBtn.bottom
-            onClicked: {
-                winld.active = true
-            }
+            onClicked: playlistWindow.show()
         }
-        Loader {
-            id: winld
-            active: false
-            sourceComponent: Window {
-                width: 640
-                height: 480
-                visible: true
 
-                ListModel {
-                    id: songModel
-                    ListElement {
-                        name: "Bill Smith"
-                        number: "555 3264"
-                    }
-                }
+        Window {
+            id: playlistWindow
+            width: 640
+            height: 480
 
-                ListView {
+            ListModel {
+                id: songModel
+            }
+
+            ListView {
+                width: parent.width
+                implicitHeight: 200
+                model: songModel
+
+                delegate: Text {
                     width: parent.width
-                    implicitHeight: 200
-                    model: songModel
-
-                    delegate: Text {
-                        text: {
-                            for(var i=0; i<songModel.count; i++)
-                                console.log(songModel.get(i).name)
-                        }
-                    }
-
-                    Button{
-                        width: parent.width
-                        height: 50
-                        anchors.bottom: parent.bottom
-                        onClicked: {
-                            songModel.append({"name": "asdasdasd"})
-                        }
+                    height: 20
+                    text:  {
+                        text: songUrl
                     }
                 }
             }
         }
+
         FileDialog{
             id: fileDialog
             folder: shortcuts.home
             nameFilters: "*.mp3"
             onAccepted: {
+                var fileUrl = "" +this.fileUrl
+                console.log(songModel.count)
+                songModel.insert(songModel.count, {"songUrl": fileUrl})
                 player.source = this.fileUrl
             }
         }
