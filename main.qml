@@ -15,6 +15,7 @@ Window {
 
     Audio{
         id: player
+        property int songIndex: 0
         autoPlay: true
     }
 
@@ -110,7 +111,16 @@ Window {
                     player.play()
             }
         }
-
+        Button{
+            text: "Next"
+            font.family: "Montserrat"
+            font.weight: Font.DemiBold
+            font.pixelSize: 11
+            onClicked: {
+                player.songIndex++
+                player.source = songModel.get(player.songIndex).songUrl
+            }
+        }
         Button{
             text: "Playlist"
             font.family: "Montserrat"
@@ -140,6 +150,15 @@ Window {
                     text:  {
                         text: songUrl
                     }
+                    MouseArea{
+                        onClicked: {
+                            console.log('in')
+                            player.songIndex = this.songIndex
+                            player.source = songModel.get(player.songIndex).songUrl
+                        }
+                    }
+
+                    color: index % 2 === 0 ? "red" : "blue "
                 }
             }
         }
@@ -151,8 +170,8 @@ Window {
             onAccepted: {
                 var fileUrl = "" +this.fileUrl
                 console.log(songModel.count)
-                songModel.insert(songModel.count, {"songUrl": fileUrl})
-                player.source = this.fileUrl
+                songModel.insert(songModel.count, {"songUrl": fileUrl, "index": songModel.count})
+                player.source = songModel.get(player.songIndex).songUrl
             }
         }
     }
