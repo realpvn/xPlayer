@@ -17,6 +17,7 @@ Window {
         id: player
         property int songIndex: 0
         autoPlay: true
+        source: songModel.count > 0 ? songModel.get(player.songIndex).songUrl : ""
     }
 
     Column{
@@ -144,20 +145,22 @@ Window {
                 implicitHeight: 200
                 model: songModel
 
-                delegate: Text {
+                delegate: Text{
                     width: parent.width
-                    height: 20
+                    height: 40
                     text:  {
                         text: songUrl
                     }
+
+                    font.bold: index === player.songIndex
+
                     MouseArea{
+                        width: parent.width
+                        height: 40
                         onClicked: {
-                            console.log('in')
-                            player.songIndex = this.songIndex
-                            player.source = songModel.get(player.songIndex).songUrl
+                            player.songIndex = index
                         }
                     }
-
                     color: index % 2 === 0 ? "red" : "blue "
                 }
             }
@@ -169,9 +172,11 @@ Window {
             nameFilters: "*.mp3"
             onAccepted: {
                 var fileUrl = "" +this.fileUrl
-                console.log(songModel.count)
                 songModel.insert(songModel.count, {"songUrl": fileUrl, "index": songModel.count})
-                player.source = songModel.get(player.songIndex).songUrl
+
+                if (songModel.count === 1) {
+                    player.songIndex = 0
+                }
             }
         }
     }
